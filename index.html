@@ -1,1 +1,48 @@
-<script src="main.js">
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; background: black; overflow: hidden; font-family: sans-serif; }
+        
+        /* Full screen video container */
+        #video-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures video fills screen */
+        }
+
+        /* Overlay text */
+        #ui-layer {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            z-index: 2;
+            text-align: right;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .source-name { color: #00e5ff; font-size: 48px; font-weight: bold; margin: 0; }
+        .source-url { color: white; font-size: 20px; opacity: 0.8; margin: 5px 0 0 0; }
+    </style>
+</head>
+<body>
+
+    <div id="video-container">
+        <video id="tv-player" autoplay muted></video>
+    </div>
+
+    <div id="ui-layer">
+        <p class="source-name" id="name-display">Loading...</p>
+        <p class="source-url" id="url-display">Initializing Hardware</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
