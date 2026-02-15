@@ -68,3 +68,58 @@ document.addEventListener('keydown', function(e) {
 
 // Start the app on Live TV
 window.onload = () => updateInput(0);
+let mediaRecorder;
+let recordedChunks = [];
+const RECORD_DURATION = 10000; // 10 seconds
+
+const videoElement = document.getElementById('tv-player');
+
+// Event listener: Trigger when video actually starts playing successfully
+videoElement.addEventListener('playing', () => {
+    console.log("Stream is working. Starting 10s recording...");
+    startRecording();
+});
+
+function startRecording() {
+    recordedChunks = [];
+    
+    // Capture the stream from the video element
+    const stream = videoElement.captureStream ? videoElement.captureStream() : videoElement.mozCaptureStream();
+    
+    mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm;codecs=vp8'
+    });
+
+    mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.onstop = exportVideo;
+
+    // Start recording
+    mediaRecorder.start();
+
+    // Stop after 10 seconds
+    setTimeout(() => {
+        if (mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+            console.log("Recording finished.");
+        }
+    }, RECORD_DURATION);
+}
+
+function exportVideo() {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    
+    // Create a preview player for the exported video
+    const exportPlayer = document.getElementById('export-player');
+    const exportContainer = document.getElementById('export-container');
+    
+    exportPlayer.src = url;
+    exportContainer.style.display = 'block'; // Show the exported video UI
+    
+    console.log("Exported Video URL:", url);
+}
