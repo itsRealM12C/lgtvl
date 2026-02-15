@@ -2,45 +2,39 @@
 <html>
 <head>
     <style>
-        body { margin: 0; background: black; overflow: hidden; font-family: sans-serif; }
+        body { margin: 0; background: transparent; overflow: hidden; font-family: sans-serif; color: white; }
+        #video-container { position: absolute; width: 100vw; height: 100vh; z-index: 1; background: black; }
+        video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Full screen video container */
-        #video-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 1;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures video fills screen */
-        }
-
-        /* Overlay text */
         #ui-layer {
-            position: absolute;
-            top: 50px;
-            right: 50px;
-            z-index: 2;
-            text-align: right;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            position: absolute; top: 40px; right: 40px; z-index: 10;
+            text-align: right; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 8px;
         }
-
-        .source-name { color: #00e5ff; font-size: 48px; font-weight: bold; margin: 0; }
-        .source-url { color: white; font-size: 20px; opacity: 0.8; margin: 5px 0 0 0; }
+        .status { color: #00e5ff; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        .name { font-size: 42px; font-weight: 800; margin: 5px 0; }
+        
+        #preview-box {
+            display: none; position: absolute; bottom: 40px; left: 40px; z-index: 20;
+            width: 320px; background: #1a1a1a; border: 2px solid #00e5ff; padding: 10px;
+        }
+        #preview-box video { width: 100%; height: auto; }
     </style>
 </head>
 <body>
-
     <div id="video-container">
         <video id="tv-player" autoplay muted></video>
     </div>
 
     <div id="ui-layer">
-        <p class="source-name" id="name-display">Loading...</p>
-        <p class="source-url" id="url-display">Initializing Hardware</p>
+        <div id="rec-dot" style="display:none; color:red;">● RECORDING</div>
+        <div class="status" id="status-text">Signal: Waiting</div>
+        <div class="name" id="name-display">INITIALIZING</div>
+        <div id="url-display" style="opacity:0.6; font-family:monospace;">---</div>
+    </div>
+
+    <div id="preview-box" id="export-container">
+        <div style="font-size:12px; margin-bottom:5px;">LAST 10s CAPTURE:</div>
+        <video id="export-player" controls></video>
     </div>
 
     <script src="app.js"></script>
